@@ -1,7 +1,3 @@
-//
-// Created by Számel Tamás on 2023. 02. 20..
-//
-
 #pragma once
 
 #include <map>
@@ -22,14 +18,6 @@ public:
 
 public:
     int getData();
-    int print();
+    int getData() const;
 };
 
-/*
-bool operator<(Node n1, Node n2){
-    return n1.getData() < n2.getData();
-}
-bool operator==(Node n1, Node n2){
-    return n1.getData() == n2.getData();
-}
-*/

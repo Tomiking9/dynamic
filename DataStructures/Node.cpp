@@ -14,7 +14,13 @@ Node::Node(int data){
 int Node::getData() {
     return this->data;
 }
+int Node::getData() const {
+    return this->data;
+}
 
-int Node::print(){
-    return 1;
+bool operator<(const Node& n1, const Node& n2){
+    return n1.getData() < n2.getData();
+}
+bool operator==(const Node& n1, const Node& n2){
+    return n1.getData() == n2.getData();
 }
