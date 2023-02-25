@@ -2,8 +2,8 @@
 #include <iostream>
 #include <iterator>
 
-int main(int argc, const char * argv[]) {
-    Graph* g = new Graph();
+int main(int argc, const char* argv[]) {
+    auto* g = new Graph();
 
     Node* n1 = new Node(1);
     Node* n2 = new Node(24);
@@ -16,10 +16,14 @@ int main(int argc, const char * argv[]) {
     g->addNode(n4);
 
     g->addEdge(n1, n2);
-    g->addEdge(n1, n3);
+    g->addEdge(n1, n4);
 
-    auto nodes = g->getNodes();
+    g->setNodeNeighbors(n1);
+    g->setNodeFreighbors(n1);
 
+    for (auto node : n1->getFreighbor()->getCurrentFree()){
+        cout << node << endl;
+    }
 
     return 0;
 }

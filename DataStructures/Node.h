@@ -12,6 +12,10 @@ class Node {
     int degree;
     set<Node*> neighbor;
     Freighbor* freighbor;
+public:
+    Freighbor *getFreighbor() const;
+
+    void setFreighbor(Freighbor *freighbor);
 
 public:
     explicit Node(int data);
@@ -19,5 +23,7 @@ public:
     int getData();
     int getData() const;
 
+    void setNeighbors(set<Node*> nodes);
+    set<Node*> getNeighbors();
 };
 

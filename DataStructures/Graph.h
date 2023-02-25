@@ -1,5 +1,6 @@
 #pragma once
 #include "Node.h"
+#include "Matching.h"
 #include <vector>
 using namespace std;
 
@@ -16,6 +17,8 @@ public:
     vector<Node*> sortNodes();
     string printGraph();
 
+    void setNodeNeighbors(Node* node);
+    void setNodeFreighbors(Node* node);
 };
 
 

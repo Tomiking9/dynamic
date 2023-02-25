@@ -1,17 +1,18 @@
-//
-// Created by Számel Tamás on 2023. 02. 20..
-//
-
 #pragma once
-
 #include <cmath>
+#include <array>
 
 class Freighbor {
-    bool* current_free;
+    std::array<bool, 10> current_free;
+
+
+private:
     int* counter;
     int total_free;
 
 public:
     Freighbor();
+    void setCurrentFree(std::array<bool, 10> current);
+    const std::array<bool, 10> &getCurrentFree() const;
 };
 

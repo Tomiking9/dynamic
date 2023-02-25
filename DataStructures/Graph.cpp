@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <iostream>
+#include <array>
 #include "Graph.h"
 
 
@@ -37,6 +38,30 @@ void Graph::addEdge(Node *src, Node* dst) {
         edges[src].insert(dst);
     }
 }
+
+
+void Graph::setNodeNeighbors(Node* node){
+    node->setNeighbors(edges[node]);
+}
+
+
+void Graph::setNodeFreighbors(Node* node){
+    auto nodes = sortNodes();
+    auto current_neighbors = node->getNeighbors();
+    std::array<bool, 10> free_neighbors{};
+
+    std::fill(begin(free_neighbors), end(free_neighbors), false);
+
+    int i = 0;
+    for (auto nd : nodes){
+        if ((current_neighbors.find(nd) != current_neighbors.end())){
+            free_neighbors[i] = true;
+        }
+        i++;
+    }
+    node->getFreighbor()->setCurrentFree(free_neighbors);
+}
+
 
 
 string Graph::printGraph() {
