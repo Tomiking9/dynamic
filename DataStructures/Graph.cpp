@@ -3,21 +3,18 @@
 #include "Graph.h"
 
 
-Node** Graph::getNodes() {
-    auto nodes = new Node*[10];
-    int i = 0;
+vector<Node*> Graph::getNodes() {
+    auto nodes = new vector<Node*>;
     for (const auto &[key, val] : edges){
-         nodes[i] = key;
-         i++;
+         nodes->push_back(key);
     }
-    return nodes;
+    return *nodes;
 }
 
-Node** Graph::sortNodes() {
-    Node** sorted = new Node*[10];
-    auto nodes = getNodes();
-
-    std::sort(nodes, nodes + sizeof(nodes) / sizeof(nodes[0]));
+bool compareNodes(Node* n1, Node* n2) {return n1->getData() < n2->getData();}
+vector<Node*> Graph::sortNodes() {
+    auto sorted = getNodes();
+    std::sort(sorted.begin(),sorted.end(), compareNodes);
     return sorted;
 }
 

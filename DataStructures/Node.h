@@ -16,8 +16,8 @@ class Node {
 public:
     explicit Node(int data);
 
-public:
     int getData();
     int getData() const;
+
 };
 

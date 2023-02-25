@@ -1,6 +1,6 @@
 #pragma once
 #include "Node.h"
-
+#include <vector>
 using namespace std;
 
 class Graph {
@@ -11,8 +11,9 @@ public:
     void addNode(Node* node);
     void addEdge(Node *src, Node *dst);
     void addEdge(Node* src, const set<Node*>& dst);
-    Node** getNodes();
-    Node** sortNodes();
+
+    vector<Node*> getNodes();
+    vector<Node*> sortNodes();
     string printGraph();
 
 };

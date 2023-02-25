@@ -18,9 +18,11 @@ int Node::getData() const {
     return this->data;
 }
 
+
+/*
 bool operator<(const Node& n1, const Node& n2){
     return n1.getData() < n2.getData();
 }
 bool operator==(const Node& n1, const Node& n2){
     return n1.getData() == n2.getData();
-}
+} */
