@@ -4,6 +4,6 @@
 
 int main(int argc, const char * argv[]) {
     Graph* g = new Graph();
-    // g->print();
+    g->print();
     return 0;
 }

@@ -2,8 +2,7 @@
 // Created by Számel Tamás on 2023. 02. 20..
 //
 
-#ifndef DYNAMIC_NODE_H
-#define DYNAMIC_NODE_H
+#pragma once
 
 #include <map>
 #include <set>
@@ -26,12 +25,11 @@ public:
     int print();
 };
 
+/*
 bool operator<(Node n1, Node n2){
     return n1.getData() < n2.getData();
 }
 bool operator==(Node n1, Node n2){
     return n1.getData() == n2.getData();
 }
-
-
-#endif //DYNAMIC_NODE_H
+*/

@@ -2,10 +2,7 @@
 // Created by Számel Tamás on 2023. 02. 20..
 //
 
-#ifndef DYNAMIC_GRAPH_H
-#define DYNAMIC_GRAPH_H
-
-
+#pragma once
 #include "Node.h"
 
 using namespace std;
@@ -21,4 +18,3 @@ public:
 };
 
 
-#endif //DYNAMIC_GRAPH_H

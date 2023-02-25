@@ -2,8 +2,7 @@
 // Created by Számel Tamás on 2023. 02. 20..
 //
 
-#ifndef DYNAMIC_FREIGHBOR_H
-#define DYNAMIC_FREIGHBOR_H
+#pragma once
 
 #include <cmath>
 
@@ -16,5 +15,3 @@ public:
     Freighbor();
 };
 
-
-#endif //DYNAMIC_FREIGHBOR_H
