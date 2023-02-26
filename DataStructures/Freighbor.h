@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <array>
+#include <numeric>
 using namespace std;
 
 class Freighbor {
@@ -15,10 +16,14 @@ public:
 
 
     int getTotalFree() const;
-    void setTotalFree(int totalFree);
+    void setTotalFree(int);
     int* getCounter() const;
-    void setCounter(int* counter);
-    void setCurrentFree(bool* current);
+    void setCounter(int*);
+    void setCurrentFree(bool*);
     const bool* getCurrentFree() const;
+
+    void updateCurrentFree(int, int);
+    void updateCounter(int, bool);
+    void updateTotalFree();
 };
 

@@ -4,48 +4,57 @@
 #include "Graph.h"
 
 
-vector<Node*> Graph::getNodes() {
-    auto nodes = new vector<Node*>;
-    for (const auto &[key, val] : edges){
-         nodes->push_back(key);
-    }
-    return *nodes;
+Graph::Graph(int nodes) {
+    this->max_nodes = nodes;
+
 }
 
-bool compareNodes(Node* n1, Node* n2) {return n1->getData() < n2->getData();}
-vector<Node*> Graph::sortNodes() {
-    auto sorted = getNodes();
-    std::sort(sorted.begin(),sorted.end(), compareNodes);
-    return sorted;
+vector<Node*> Graph::getNodes() {
+    auto nodes_vect = new vector<Node*>;
+    for (const auto &[key, val] : edges){
+         nodes_vect->push_back(key);
+    }
+    return *nodes_vect;
+}
+
+int Graph::getNodeIndex(Node* node) {
+    auto it = find(nodes.begin(), nodes.end(), node);
+    if (it != nodes.end()) {
+        return it - nodes.begin();
+    }
+    return -1;
 }
 
 void Graph::addNode(Node *node) {
     this->edges[node] = {};
 }
 
-void Graph::addEdge(Node *src, const set<Node*>& dst) {
-    if (edges.find(src) == edges.end()) {
-        edges[src] = dst;
-    } else {
-        edges[src].insert(dst.begin(), dst.end());
-    }
-}
 
 void Graph::addEdge(Node *src, Node* dst) {
+    // Node not in graph
     if (edges.find(src) == edges.end()) {
         edges[src] = {dst};
+
+    // Already in graph
     } else {
         edges[src].insert(dst);
     }
+
+    // Update node neighbors with the new edge
+    src->getNeighbors().insert(dst);
+
+    int nodeIndex = getNodeIndex(dst);
+    src->getFreighbor()->updateCurrentFree(nodeIndex, 1);
+    src->getFreighbor()->updateCounter( (int)nodeIndex / sqrt(max_nodes), true);
+    src->getFreighbor()->updateTotalFree();
+
 }
 
 void Graph::setNodeNeighbors(Node* node){
     node->setNeighbors(edges[node]);
 }
 
-
-void Graph::setNodeFreighbors(Node* node) {
-    auto nodes = sortNodes();
+void Graph::setNodeFreighbor(Node* node) {
     auto current_neighbors = node->getNeighbors();
 
     // Set value to 1 if free (not in matching) and if neighbor (TODO matching)
@@ -68,13 +77,11 @@ void Graph::setNodeFreighbors(Node* node) {
     }
 
     // Total amount of free neighbors of the node
-    int total_free = std::accumulate(counter, counter + (sizeof(counter)/sizeof(counter[0])), 0);
+    int total_free = std::accumulate(counter, counter + ((int) sizeof(counter)/sizeof(counter[0])), 0);
 
     Freighbor* fr = new Freighbor(free_neighbors, counter, total_free);
     node->setFreighbor(fr);
 }
-
-
 
 string Graph::printGraph() {
     string ret;

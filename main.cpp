@@ -15,27 +15,45 @@ int main(int argc, const char* argv[]) {
     g->addNode(n3);
     g->addNode(n4);
 
-    g->addEdge(n1, n2);
-    g->addEdge(n1, n4);
 
-    g->setNodeNeighbors(n1);
-    g->setNodeFreighbors(n1);
-
-    auto sorted = g->sortNodes();
-
-    auto current_free = n1->getFreighbor()->getCurrentFree();
-    auto counter = n1->getFreighbor()->getCounter();
-
-
-    for (int i = 0; i < g->max_nodes; i++){
-        cout << sorted[i]->getData() << ": " << current_free[i] << endl;
-    }
-
-    cout << "------" << endl;
-    for (int i = 0; i < (int)sqrt(g->max_nodes); i++){
-        cout << counter[i] << endl;
-    }
-    cout << "------" << endl;
-    cout << n1->getFreighbor()->getTotalFree();
     return 0;
 }
+
+
+
+/*
+    g->setNodeFreighbor(n1);
+
+
+    g->nodes = g->getNodes();
+    cout << "NODES" << endl;
+    for (int i = 0; i < g->max_nodes; i++) {
+        cout << i << ": " << g->nodes[i]->getData() << endl;
+    }
+
+
+    cout << "-------" << endl;
+    for (int i = 0; i < g->max_nodes; i++) {
+        cout << i << ": " << n1->getFreighbor()->getCurrentFree()[i] << endl;
+    }
+
+    g->addEdge(n1, n2);
+    cout << "-------" << endl;
+    for (int i = 0; i < g->max_nodes; i++) {
+        cout << i << ": " << n1->getFreighbor()->getCurrentFree()[i] << endl;
+    }
+    for (int i = 0; i < 2; i++) {
+        cout << i << ": " << n1->getFreighbor()->getCounter()[i] << endl;
+    }
+
+
+    g->addEdge(n1, n4);
+    cout << "-------" << endl;
+
+    for (int i = 0; i < g->max_nodes; i++) {
+        cout << i << ": " << n1->getFreighbor()->getCurrentFree()[i] << endl;
+    }
+    for (int i = 0; i < 2; i++) {
+        cout << i << ": " << n1->getFreighbor()->getCounter()[i] << endl;
+    }
+ */

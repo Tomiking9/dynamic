@@ -9,6 +9,8 @@ Node::Node(int data){
     this->freighbor = new Freighbor();
 }
 
+
+/* Getter-Setter start */
 int Node::getData() {
     return this->data;
 }
@@ -27,7 +29,7 @@ Freighbor* Node::getFreighbor() const {
 void Node::setFreighbor(Freighbor *freighbor) {
     Node::freighbor = freighbor;
 }
-
+/* Getter-Setter end */
 
 
 

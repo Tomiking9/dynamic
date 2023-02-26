@@ -4,21 +4,37 @@
 #include <vector>
 using namespace std;
 
+// Compare nodes based on their key data
+struct NodeComparator {
+    bool operator()(Node* n1, Node* n2) {
+        return n1->getData() < n2->getData();
+    }
+    bool operator()(Node* n1, Node* n2) const {
+        return n1->getData() < n2->getData();
+    }
+};
+
+
 class Graph {
 public:
-    int max_nodes = 4;
-    map<Node*, set<Node*>> edges;
+    Graph(int);
+
+    int max_nodes;
+    map<Node*, set<Node*>, NodeComparator> edges;
+    vector<Node*> nodes;
+
 
     void addNode(Node* node);
     void addEdge(Node *src, Node *dst);
-    void addEdge(Node* src, const set<Node*>& dst);
+
 
     vector<Node*> getNodes();
-    vector<Node*> sortNodes();
     string printGraph();
 
     void setNodeNeighbors(Node* node);
-    void setNodeFreighbors(Node* node);
+    void setNodeFreighbor(Node* node);
+
+    int getNodeIndex(Node *node);
 };
 
 
