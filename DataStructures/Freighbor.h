@@ -1,18 +1,24 @@
 #pragma once
 #include <cmath>
 #include <array>
+using namespace std;
 
 class Freighbor {
-    std::array<bool, 10> current_free;
-
-
 private:
+    bool* current_free;
     int* counter;
     int total_free;
 
 public:
-    Freighbor();
-    void setCurrentFree(std::array<bool, 10> current);
-    const std::array<bool, 10> &getCurrentFree() const;
+    Freighbor() = default;
+    Freighbor(bool*, int*, int);
+
+
+    int getTotalFree() const;
+    void setTotalFree(int totalFree);
+    int* getCounter() const;
+    void setCounter(int* counter);
+    void setCurrentFree(bool* current);
+    const bool* getCurrentFree() const;
 };
 

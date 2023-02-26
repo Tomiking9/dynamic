@@ -1,6 +1,6 @@
 #include <algorithm>
 #include <iostream>
-#include <array>
+#include <numeric>
 #include "Graph.h"
 
 
@@ -39,19 +39,17 @@ void Graph::addEdge(Node *src, Node* dst) {
     }
 }
 
-
 void Graph::setNodeNeighbors(Node* node){
     node->setNeighbors(edges[node]);
 }
 
 
-void Graph::setNodeFreighbors(Node* node){
+void Graph::setNodeFreighbors(Node* node) {
     auto nodes = sortNodes();
     auto current_neighbors = node->getNeighbors();
-    std::array<bool, 10> free_neighbors{};
 
-    std::fill(begin(free_neighbors), end(free_neighbors), false);
-
+    // Set value to 1 if free (not in matching) and if neighbor (TODO matching)
+    bool* free_neighbors = new bool[max_nodes];
     int i = 0;
     for (auto nd : nodes){
         if ((current_neighbors.find(nd) != current_neighbors.end())){
@@ -59,7 +57,21 @@ void Graph::setNodeFreighbors(Node* node){
         }
         i++;
     }
-    node->getFreighbor()->setCurrentFree(free_neighbors);
+
+    // Count free neighbors in chunks for faster lookup later (TODO can we do it nicer)
+    int* counter = new int[(int) sqrt(max_nodes)];
+    int interval = (int)sqrt(max_nodes);
+    for (int j = 0; j < interval; j++) {
+        for (int k = j*interval; k < (j+1)*interval; k++){
+            counter[j] += free_neighbors[k];
+        }
+    }
+
+    // Total amount of free neighbors of the node
+    int total_free = std::accumulate(counter, counter + (sizeof(counter)/sizeof(counter[0])), 0);
+
+    Freighbor* fr = new Freighbor(free_neighbors, counter, total_free);
+    node->setFreighbor(fr);
 }
 
 

@@ -1,23 +1,31 @@
-//
-// Created by Számel Tamás on 2023. 02. 20..
-//
-
-#include <numeric>
 #include "Freighbor.h"
 
-
-#define n 10
-
-Freighbor::Freighbor(){
-    this->current_free = std::array<bool, 10>();
-    this->counter = new int[floor(sqrt(n))];
-    this->total_free = std::accumulate(counter, counter+((int)sizeof(counter) / sizeof(counter[0])), 0);
+Freighbor::Freighbor(bool* current, int* counter, int total){
+    this->current_free = current;
+    this->counter = counter;
+    this->total_free = total;
 }
 
-void Freighbor::setCurrentFree(std::array<bool, 10> current) {
+const bool* Freighbor::getCurrentFree() const {
+    return current_free;
+}
+
+void Freighbor::setCurrentFree(bool* current) {
     this->current_free = current;
 }
 
-const std::array<bool, 10> &Freighbor::getCurrentFree() const {
-    return current_free;
+int *Freighbor::getCounter() const {
+    return counter;
+}
+
+void Freighbor::setCounter(int *counter) {
+    this->counter = counter;
+}
+
+int Freighbor::getTotalFree() const {
+    return total_free;
+}
+
+void Freighbor::setTotalFree(int totalFree) {
+    this->total_free = totalFree;
 }

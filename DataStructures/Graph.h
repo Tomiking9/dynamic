@@ -6,7 +6,7 @@ using namespace std;
 
 class Graph {
 public:
-    int max_nodes;
+    int max_nodes = 4;
     map<Node*, set<Node*>> edges;
 
     void addNode(Node* node);

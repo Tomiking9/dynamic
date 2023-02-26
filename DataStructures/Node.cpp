@@ -18,18 +18,19 @@ int Node::getData() const {
 void Node::setNeighbors(set<Node*> nodes){
     this->neighbor = std::move(nodes);
 }
-
 set<Node*> Node::getNeighbors() {
     return this->neighbor;
 }
-
-Freighbor *Node::getFreighbor() const {
+Freighbor* Node::getFreighbor() const {
     return freighbor;
 }
-
 void Node::setFreighbor(Freighbor *freighbor) {
     Node::freighbor = freighbor;
 }
+
+
+
+
 
 /*
 bool operator<(const Node& n1, const Node& n2){

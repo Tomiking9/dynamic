@@ -21,9 +21,21 @@ int main(int argc, const char* argv[]) {
     g->setNodeNeighbors(n1);
     g->setNodeFreighbors(n1);
 
-    for (auto node : n1->getFreighbor()->getCurrentFree()){
-        cout << node << endl;
+    auto sorted = g->sortNodes();
+
+    auto current_free = n1->getFreighbor()->getCurrentFree();
+    auto counter = n1->getFreighbor()->getCounter();
+
+
+    for (int i = 0; i < g->max_nodes; i++){
+        cout << sorted[i]->getData() << ": " << current_free[i] << endl;
     }
 
+    cout << "------" << endl;
+    for (int i = 0; i < (int)sqrt(g->max_nodes); i++){
+        cout << counter[i] << endl;
+    }
+    cout << "------" << endl;
+    cout << n1->getFreighbor()->getTotalFree();
     return 0;
 }
