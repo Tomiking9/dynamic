@@ -1,12 +1,10 @@
-#include <algorithm>
-#include <iostream>
-#include <numeric>
 #include "Graph.h"
 
 
 Graph::Graph(int nodes) {
     this->max_nodes = nodes;
-
+    this->nodes = *new std::vector<Node*>();
+    this->edges = *new map<Node*, set<Node*>, NodeComparator>();
 }
 
 vector<Node*> Graph::getNodes() {
@@ -22,11 +20,18 @@ int Graph::getNodeIndex(Node* node) {
     if (it != nodes.end()) {
         return it - nodes.begin();
     }
+
+    // If node not in graph
     return -1;
 }
 
 void Graph::addNode(Node *node) {
+    // Node in graph
     this->edges[node] = {};
+
+    // Node locally
+    setNodeNeighbors(node);
+    setNodeFreighbor(node);
 }
 
 
@@ -41,12 +46,15 @@ void Graph::addEdge(Node *src, Node* dst) {
     }
 
     // Update node neighbors with the new edge
-    src->getNeighbors().insert(dst);
+    setNodeNeighbors(src);
 
+    // Update node freighbors if the destination node is not in the matching
     int nodeIndex = getNodeIndex(dst);
-    src->getFreighbor()->updateCurrentFree(nodeIndex, 1);
-    src->getFreighbor()->updateCounter( (int)nodeIndex / sqrt(max_nodes), true);
-    src->getFreighbor()->updateTotalFree();
+    if (matching.find(dst) == matching.end()) {
+        src->getFreighbor()->updateCurrentFree(nodeIndex, 1);
+        src->getFreighbor()->updateCounter( (int)nodeIndex / sqrt(max_nodes), true);
+        src->getFreighbor()->updateTotalFree();
+    }
 
 }
 
@@ -57,11 +65,18 @@ void Graph::setNodeNeighbors(Node* node){
 void Graph::setNodeFreighbor(Node* node) {
     auto current_neighbors = node->getNeighbors();
 
-    // Set value to 1 if free (not in matching) and if neighbor (TODO matching)
+    // Set value to 1 if free (not in matching) and if neighbor
     bool* free_neighbors = new bool[max_nodes];
     int i = 0;
     for (auto nd : nodes){
-        if ((current_neighbors.find(nd) != current_neighbors.end())){
+        if (
+                // Edge is present in the original graph (so its a neighbor)
+                (current_neighbors.find(nd) != current_neighbors.end())
+                &&
+                // Node not in the matching (so its free)
+                matching.find(nd) == matching.end())
+
+        {
             free_neighbors[i] = true;
         }
         i++;

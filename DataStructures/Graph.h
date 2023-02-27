@@ -1,7 +1,10 @@
 #pragma once
 #include "Node.h"
-#include "Matching.h"
 #include <vector>
+#include <algorithm>
+#include <iostream>
+#include <numeric>
+
 using namespace std;
 
 // Compare nodes based on their key data
@@ -20,21 +23,19 @@ public:
     Graph(int);
 
     int max_nodes;
-    map<Node*, set<Node*>, NodeComparator> edges;
     vector<Node*> nodes;
-
+    map<Node*, set<Node*>, NodeComparator> edges;
+    map<Node*, Node*, NodeComparator> matching;
 
     void addNode(Node* node);
     void addEdge(Node *src, Node *dst);
-
-
-    vector<Node*> getNodes();
-    string printGraph();
 
     void setNodeNeighbors(Node* node);
     void setNodeFreighbor(Node* node);
 
     int getNodeIndex(Node *node);
+    vector<Node*> getNodes();
+    string printGraph();
 };
 
 

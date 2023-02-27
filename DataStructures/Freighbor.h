@@ -25,5 +25,7 @@ public:
     void updateCurrentFree(int, int);
     void updateCounter(int, bool);
     void updateTotalFree();
+    bool hasFree();
+    int getFree();
 };
 

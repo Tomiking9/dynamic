@@ -22,6 +22,30 @@ void Freighbor::updateTotalFree() {
     this->total_free = std::accumulate(counter, counter + ((int) sizeof(counter)/sizeof(counter[0])), 0);
 }
 
+bool Freighbor::hasFree() {
+    return total_free > 0;
+}
+
+int Freighbor::getFree() {
+    int ret_node_index = -1;
+    int counter_length = (int) sizeof(counter) / sizeof(counter[0]);
+    int current_free_length = (int) sizeof(current_free) / sizeof(current_free[0]);
+
+    for (int i = 0; i < counter_length; i++) {
+        if (counter[i] > 0) {
+            for (int j = i * counter_length; j < current_free_length; j++) {
+                if (current_free[j] > 0) {
+                    ret_node_index = j;
+                    break;
+                }
+            }
+        }
+
+        if (ret_node_index != -1) { break; }
+    }
+
+    return ret_node_index;
+}
 
 /* Getter-Setter start */
 const bool* Freighbor::getCurrentFree() const {

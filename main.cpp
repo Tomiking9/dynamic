@@ -3,17 +3,19 @@
 #include <iterator>
 
 int main(int argc, const char* argv[]) {
-    auto* g = new Graph();
+    auto* g = new Graph(4);
 
     Node* n1 = new Node(1);
     Node* n2 = new Node(24);
     Node* n3 = new Node(3);
     Node* n4 = new Node(4);
 
+
     g->addNode(n2);
     g->addNode(n1);
     g->addNode(n3);
     g->addNode(n4);
+
 
 
     return 0;

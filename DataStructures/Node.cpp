@@ -1,7 +1,5 @@
 #include "Node.h"
 
-#include <utility>
-
 Node::Node(int data){
     this->data = data;
     this->degree = 0;
