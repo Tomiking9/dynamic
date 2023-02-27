@@ -17,7 +17,6 @@ int main(int argc, const char* argv[]) {
     g->addNode(n4);
 
 
-
     return 0;
 }
 

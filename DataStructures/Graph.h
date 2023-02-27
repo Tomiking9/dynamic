@@ -20,12 +20,15 @@ struct NodeComparator {
 
 class Graph {
 public:
-    Graph(int);
+    explicit Graph(int);
 
     int max_nodes;
     vector<Node*> nodes;
     map<Node*, set<Node*>, NodeComparator> edges;
     map<Node*, Node*, NodeComparator> matching;
+
+    // NA EZ MAJD MEKKORAT FOG MENNI
+    set<Node*, NodeComparator> free_max;
 
     void addNode(Node* node);
     void addEdge(Node *src, Node *dst);

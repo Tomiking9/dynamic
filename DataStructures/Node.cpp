@@ -28,15 +28,3 @@ void Node::setFreighbor(Freighbor *freighbor) {
     Node::freighbor = freighbor;
 }
 /* Getter-Setter end */
-
-
-
-
-/*
-bool operator<(const Node& n1, const Node& n2){
-    return n1.getData() < n2.getData();
-}
-bool operator==(const Node& n1, const Node& n2){
-    return n1.getData() == n2.getData();
-}
-*/
