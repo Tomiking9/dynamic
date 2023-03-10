@@ -57,7 +57,7 @@ void Freighbor::setCurrentFree(bool* current) {
 int *Freighbor::getCounter() const {
     return counter;
 }
-void Freighbor::setCounter(int *counter) {
+void Freighbor::setCounter(int* counter) {
     this->counter = counter;
 }
 int Freighbor::getTotalFree() const {

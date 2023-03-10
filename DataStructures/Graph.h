@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <map>
 
 using namespace std;
 
@@ -17,6 +18,16 @@ struct NodeComparator {
     }
 };
 
+// not working with this rn
+struct FreeMaxComp {
+    bool operator()(Node* n1, Node* n2) {
+        return n1->getDegree() > n2->getDegree();
+    }
+    bool operator()(Node* n1, Node* n2) const {
+        return n1->getDegree() > n2->getDegree();
+    }
+};
+
 
 class Graph {
 public:
@@ -26,9 +37,7 @@ public:
     vector<Node*> nodes;
     map<Node*, set<Node*>, NodeComparator> edges;
     map<Node*, Node*, NodeComparator> matching;
-
-    // NA EZ MAJD MEKKORAT FOG MENNI
-    set<Node*, NodeComparator> free_max;
+    multiset<Node*, FreeMaxComp> free_max;
 
     void addNode(Node* node);
     void addEdge(Node *src, Node *dst);

@@ -1,4 +1,4 @@
-#include "DataStructures/Graph.h"
+#include "Matching.h"
 #include <iostream>
 #include <iterator>
 
@@ -16,6 +16,14 @@ int main(int argc, const char* argv[]) {
     g->addNode(n3);
     g->addNode(n4);
 
+
+    g->addEdge(n1, n2);
+    g->addEdge(n1, n3);
+
+
+    for (auto i : g->free_max){
+        //cout << i->getData() << " Deg: " << i->getDegree() << endl;
+    }
 
     return 0;
 }

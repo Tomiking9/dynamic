@@ -3,10 +3,11 @@
 
 Graph::Graph(int nodes) {
     this->max_nodes = nodes;
-    this->nodes = *new std::vector<Node*>();
     this->edges = *new map<Node*, set<Node*>, NodeComparator>();
+    this->nodes = getNodes();
 }
 
+// TODO replace this
 vector<Node*> Graph::getNodes() {
     auto nodes_vect = new vector<Node*>;
     for (const auto &[key, val] : edges){
@@ -16,13 +17,7 @@ vector<Node*> Graph::getNodes() {
 }
 
 int Graph::getNodeIndex(Node* node) {
-    auto it = find(nodes.begin(), nodes.end(), node);
-    if (it != nodes.end()) {
-        return it - nodes.begin();
-    }
-
-    // If node not in graph
-    return -1;
+    return distance(edges.begin(),edges.find(node));
 }
 
 void Graph::addNode(Node *node) {
@@ -32,21 +27,34 @@ void Graph::addNode(Node *node) {
     // Node locally
     setNodeNeighbors(node);
     setNodeFreighbor(node);
+
+    // Node into F_max
+    free_max.insert(node);
 }
 
 
-void Graph::addEdge(Node *src, Node* dst) {
-    // Node not in graph
-    if (edges.find(src) == edges.end()) {
-        edges[src] = {dst};
-
-    // Already in graph
-    } else {
+void Graph::addEdge(Node* src, Node* dst) {
+    // Node in graph
+    if (edges.find(src) != edges.end()) {
         edges[src].insert(dst);
+    } else {
+        cout << "how did this happen";
     }
 
     // Update node neighbors with the new edge
     setNodeNeighbors(src);
+    setNodeNeighbors(dst);
+
+    // TODO how to remove redundant elements
+    // Update the degree on both
+    free_max.extract(src);
+    src->setDegree(src->getDegree() + 1);
+    free_max.insert(src);
+
+    free_max.extract(dst);
+    dst->setDegree(dst->getDegree() + 1);
+    free_max.insert(dst);
+
 
     // Update node freighbors if the destination node is not in the matching
     int nodeIndex = getNodeIndex(dst);
@@ -55,8 +63,8 @@ void Graph::addEdge(Node *src, Node* dst) {
         src->getFreighbor()->updateCounter( (int)nodeIndex / sqrt(max_nodes), true);
         src->getFreighbor()->updateTotalFree();
     }
-
 }
+
 
 void Graph::setNodeNeighbors(Node* node){
     node->setNeighbors(edges[node]);
@@ -68,13 +76,13 @@ void Graph::setNodeFreighbor(Node* node) {
     // Set value to 1 if free (not in matching) and if neighbor
     bool* free_neighbors = new bool[max_nodes];
     int i = 0;
-    for (auto nd : nodes){
+    for (const auto &[key, val]: edges){
         if (
                 // Edge is present in the original graph (so its a neighbor)
-                (current_neighbors.find(nd) != current_neighbors.end())
+                (current_neighbors.find(key) != current_neighbors.end())
                 &&
                 // Node not in the matching (so its free)
-                matching.find(nd) == matching.end())
+                matching.find(key) == matching.end())
 
         {
             free_neighbors[i] = true;
@@ -94,9 +102,10 @@ void Graph::setNodeFreighbor(Node* node) {
     // Total amount of free neighbors of the node
     int total_free = std::accumulate(counter, counter + ((int) sizeof(counter)/sizeof(counter[0])), 0);
 
-    Freighbor* fr = new Freighbor(free_neighbors, counter, total_free);
+    auto* fr = new Freighbor(free_neighbors, counter, total_free);
     node->setFreighbor(fr);
 }
+
 
 string Graph::printGraph() {
     string ret;

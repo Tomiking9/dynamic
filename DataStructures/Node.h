@@ -7,8 +7,16 @@
 using namespace std;
 
 class Node {
+private:
     int data;
     int degree;
+    Node* mate;
+public:
+    Node *getMate() const;
+
+    void setMate(Node *mate);
+
+private:
     set<Node*> neighbor;
     Freighbor* freighbor;
 
@@ -18,6 +26,8 @@ public:
 
     int getData();
     int getData() const;
+    int getDegree() const;
+    void setDegree(int degree);
 
     set<Node*> getNeighbors();
     void setNeighbors(set<Node*> nodes);

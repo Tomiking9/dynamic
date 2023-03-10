@@ -3,6 +3,7 @@
 Node::Node(int data){
     this->data = data;
     this->degree = 0;
+    this->mate = nullptr;
     this->neighbor = set<Node*>();
     this->freighbor = new Freighbor();
 }
@@ -26,5 +27,21 @@ Freighbor* Node::getFreighbor() const {
 }
 void Node::setFreighbor(Freighbor *freighbor) {
     Node::freighbor = freighbor;
+}
+
+int Node::getDegree() const {
+    return degree;
+}
+
+void Node::setDegree(int degree) {
+    Node::degree = degree;
+}
+
+Node *Node::getMate() const {
+    return mate;
+}
+
+void Node::setMate(Node *mate) {
+    Node::mate = mate;
 }
 /* Getter-Setter end */
