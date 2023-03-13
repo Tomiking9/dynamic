@@ -1,8 +1,8 @@
 #include "Graph.h"
 
-
-Graph::Graph(int nodes) {
-    this->max_nodes = nodes;
+// TODO innen folytasd, big problem, nem lesz igy jo
+Graph::Graph(int no_nodes) {
+    this->max_nodes = no_nodes;
     this->edges = *new map<Node*, set<Node*>, NodeComparator>();
     this->nodes = getNodes();
 }
@@ -83,7 +83,6 @@ void Graph::setNodeFreighbor(Node* node) {
                 &&
                 // Node not in the matching (so its free)
                 matching.find(key) == matching.end())
-
         {
             free_neighbors[i] = true;
         }

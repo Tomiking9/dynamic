@@ -1,59 +1,80 @@
-//
-// Created by Számel Tamás on 2023. 03. 10..
-//
-
 #include "Matching.h"
 
 Matching::Matching(Graph *graph) {
     this->graph = graph;
 }
 
-void Matching::handleAddition(Node* src, Node* dst) {
-    graph->addEdge(src, dst);
+void Matching::handleAddOneFree(Node* n1, Node* n2) {
+    // n1 is free, n2 is in the matching
+    auto n2_mate = n2->getMate();
 
-    // If both free (both is true in the others free neighbor vect) match
-    if (dst->getFreighbor()->getCurrentFree()[graph->getNodeIndex(src)] &&
-        src->getFreighbor()->getCurrentFree()[graph->getNodeIndex(dst)]){
-        match(src, dst);
-    }
+    // Remove free node (n1) from n2 mate's free neighbor list (temporary)
+    n2_mate->getFreighbor()->updateCurrentFree(graph->getNodeIndex(n1), 0);
 
-    // TODO other way, different func, cleaner
-    else if (dst->getFreighbor()->getCurrentFree()[graph->getNodeIndex(src)]) {
-        auto dst_dash = dst->getMate();
+    // There may be an augmenting path which contains n1---n2
+    if (n2_mate->getFreighbor()->hasFree()) {
+        match(n1, n2);
+        match(n2_mate, graph->nodes[n2_mate->getFreighbor()->getFree()]);
 
-        // Remove free node (src) from dst mate's free neighbor list
-        dst_dash->getFreighbor()->updateCurrentFree(graph->getNodeIndex(src), 0);
+        // TODO this might be wrong cz we just added smt like that
+        graph->matching.erase(n2);
+        graph->matching.erase(n2_mate);
 
-        if (dst_dash->getFreighbor()->hasFree()) {
-            match(src, dst); // TODO why are we matching these again ffs
-            match(dst_dash, graph->nodes[dst_dash->getFreighbor()->getFree()]);
-            graph->matching.erase(dst);
-            graph->matching.erase(dst_dash);
-        } else {
-            for (auto src_neigh : src->getNeighbors()) {
-                src_neigh->getFreighbor()->updateCurrentFree(graph->getNodeIndex(src), 1);
-            }
+    } else {
+        // If we cant find a free neighbor, then n1 will remain free, and added to its neighbors free neighbor list
+        for (auto n1_neighbor : n1->getNeighbors()) {
+            n1_neighbor->getFreighbor()->updateCurrentFree(graph->getNodeIndex(n1), 1);
         }
     }
 
+}
+
+void Matching::handleAddition(Node* src, Node* dst) {
+    // Updates both nodes' neighbors, degrees
+    graph->addEdge(src, dst);
+
+    // If both free, (both is true in the others free neighbor vect) match (TODO find it from the matching)
+    if (dst->getFreighbor()->isFreeAtIndex(graph->getNodeIndex(src))
+        && src->getFreighbor()->isFreeAtIndex(graph->getNodeIndex(dst))) {
+        match(src, dst);
+        // TODO ?? remove them from the free neighbor lists
+    }
+    // src free, dst not
+    else if (dst->getFreighbor()->isFreeAtIndex(graph->getNodeIndex(src))) {
+        handleAddOneFree(src, dst);
+    }
+    // dst free, src not
+    else if (src->getFreighbor()->isFreeAtIndex(graph->getNodeIndex(dst))) {
+        handleAddOneFree(dst, src);
+    }
+    // it shouldnt come here
+    else {
+        cout << "please dont";
+    }
 }
 
 void Matching::handleDeletion(Node *src, Node *dst) {
 
 }
 
+void Matching::matchHelper(Node* node) {
+    for (auto neighbor : node->getNeighbors()) {
+        neighbor->getFreighbor()->updateCurrentFree(graph->getNodeIndex(node), 0);
+    }
+}
+
 void Matching::match(Node *src, Node *dst) {
+    // Add to matching
     graph->matching[src] = dst;
 
-    // TODO other way, different func
-    // Remove itself from neighbors' free neighbors list
+    // Remove itself from neighbors' free neighbors list, because he is no longer free
     if (src->getMate() == nullptr) {
-        for (auto nd : src->getNeighbors()) {
-            nd->getFreighbor()->updateCurrentFree(graph->getNodeIndex(src), 0);
-        }
+        matchHelper(src);
+    }
+    if (dst->getMate() == nullptr) {
+        matchHelper(dst);
     }
 
-    // why this
     src->setMate(dst);
     dst->setMate(src);
 }
@@ -62,42 +83,46 @@ void Matching::match(Node *src, Node *dst) {
 void Matching::augmentingPath(Node *node) {
     Node* free_vertex = nullptr;
 
-    for (auto nd : node->getNeighbors()) {
-        auto nd_dash = nd->getMate();
+    for (auto neighbor : node->getNeighbors()) {
+        auto neighbor_mate = neighbor->getMate();
         free_vertex = nullptr;
 
-        // If free vertex found
-        if (nd_dash->getFreighbor()->hasFree()) {
-            free_vertex = graph->nodes[nd_dash->getFreighbor()->getFree()];
+        // Find a free vertex
+        if (neighbor_mate->getFreighbor()->hasFree()) {
+            free_vertex = graph->nodes[neighbor_mate->getFreighbor()->getFree()];
         }
 
+        // If found
         if (free_vertex != nullptr) {
-            match(node, nd);
-            match(nd_dash, free_vertex);
-            graph->matching.erase(nd);
-            graph->matching.erase(nd_dash);
+            match(node, neighbor);
+            match(neighbor_mate, free_vertex);
+            graph->matching.erase(neighbor);
+            graph->matching.erase(neighbor_mate);
         }
     }
-    // If no augmenting path found
-    for (auto nd : node->getNeighbors()) {
-        nd->getFreighbor()->updateCurrentFree(graph->getNodeIndex(node), 0);
+
+    // If no augmenting path found, add the node to the neighbors free neighbor list
+    for (auto neighbor : node->getNeighbors()) {
+        neighbor->getFreighbor()->updateCurrentFree(graph->getNodeIndex(node), 1);
     }
+    // Add it to free verticies, remove its mate
     graph->free_max.insert(node);
     node->setMate(nullptr);
 }
 
-// TODO figure out what this is
 Node* Matching::surrogate(Node *node) {
+    //
     Node* surr = nullptr;
-    for (auto nd : node->getNeighbors()) {
-        surr = nd->getMate();
+    for (auto neighbor : node->getNeighbors()) {
+        surr = neighbor->getMate();
+
         // sqrt(number of edges)
         if (surr->getDegree() <= sqrt(100)) { continue; }
 
-        graph->matching.erase(nd);
+        graph->matching.erase(neighbor);
         graph->matching.erase(surr);
 
-        match(node, nd);
+        match(node, neighbor);
     }
     return surr;
 }

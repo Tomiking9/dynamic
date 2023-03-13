@@ -6,6 +6,9 @@ class Matching {
 
     explicit Matching(Graph*);
 
+    void handleAddOneFree(Node*, Node*);
+    void matchHelper(Node*);
+
     void handleAddition(Node*, Node*);
     void handleDeletion(Node*, Node*);
     void match(Node*, Node*);

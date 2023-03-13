@@ -11,6 +11,6 @@ set(SOURCE_FILES
         DataStructures/Node.cpp
         DataStructures/Node.h
         main.cpp
-        )
+        Matching.cpp Matching.h Logger.cpp Logger.h)
 
 add_executable(dynamic2 ${SOURCE_FILES})

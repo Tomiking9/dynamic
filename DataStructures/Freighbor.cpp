@@ -26,6 +26,10 @@ bool Freighbor::hasFree() {
     return total_free > 0;
 }
 
+bool Freighbor::isFreeAtIndex(int idx) {
+    return current_free[idx];
+}
+
 int Freighbor::getFree() {
     int ret_node_index = -1;
     int counter_length = (int) sizeof(counter) / sizeof(counter[0]);

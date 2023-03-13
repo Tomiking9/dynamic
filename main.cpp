@@ -1,9 +1,9 @@
-#include "Matching.h"
+#include "Logger.h"
 #include <iostream>
 #include <iterator>
 
 int main(int argc, const char* argv[]) {
-    auto* g = new Graph(4);
+    auto* graph = new Graph(4);
 
     Node* n1 = new Node(1);
     Node* n2 = new Node(24);
@@ -11,19 +11,17 @@ int main(int argc, const char* argv[]) {
     Node* n4 = new Node(4);
 
 
-    g->addNode(n2);
-    g->addNode(n1);
-    g->addNode(n3);
-    g->addNode(n4);
+    graph->addNode(n1);
+    graph->addNode(n3);
+    graph->addNode(n2);
+    graph->addNode(n4);
 
 
-    g->addEdge(n1, n2);
-    g->addEdge(n1, n3);
+    graph->addEdge(n1, n2);
+    graph->addEdge(n1, n3);
 
-
-    for (auto i : g->free_max){
-        //cout << i->getData() << " Deg: " << i->getDegree() << endl;
-    }
+    Logger* logger = new Logger(graph);
+    logger->printGraphNodes();
 
     return 0;
 }
